@@ -136,18 +136,6 @@ const AgencyDetails: React.FC = () => {
             <span className="overview-label">Short Name:</span>
             <span className="overview-value">{agency.short_name}</span>
           </div>
-          <div className="overview-item">
-            <span className="overview-label">Display Name:</span>
-            <span className="overview-value">{agency.display_name}</span>
-          </div>
-          <div className="overview-item">
-            <span className="overview-label">Sortable Name:</span>
-            <span className="overview-value">{agency.sortable_name}</span>
-          </div>
-          <div className="overview-item">
-            <span className="overview-label">Slug:</span>
-            <span className="overview-value">{agency.slug}</span>
-          </div>
         </div>
 
         {parentAgency && (

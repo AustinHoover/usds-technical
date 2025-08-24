@@ -279,11 +279,10 @@ const ChangesOverTimeChart: React.FC<ChangesOverTimeChartProps> = ({ issueDates,
       </div>
       <div className="chart-summary">
         <div>
-          <strong>Total Changes:</strong> {sortedDates.length} over{' '}
-          {labels.length} time period{labels.length !== 1 ? 's' : ''}
+          <strong>Total Changes:</strong> {sortedDates.length}
         </div>
         <div>
-          <strong>Aggregation:</strong> {getStrategyDescription(strategy)} view for better visualization
+          <strong>Aggregation:</strong> {getStrategyDescription(strategy)}
         </div>
         <div>
           <strong>Date Range:</strong> {new Date(sortedDates[0]).toLocaleDateString()} to{' '}
