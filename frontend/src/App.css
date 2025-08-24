@@ -562,7 +562,7 @@
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   border: 1px solid #e9ecef;
   transition: all 0.3s ease;
-  cursor: default;
+  cursor: pointer;
 }
 
 .title-card.clickable {
@@ -1166,6 +1166,7 @@
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   border: 1px solid #e9ecef;
   transition: box-shadow 0.2s ease;
+  cursor: pointer;
 }
 
 .agency-card:hover {

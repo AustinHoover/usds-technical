@@ -150,13 +150,10 @@ const TitleDetails: React.FC = () => {
             width: '33%',
           }}
           >
-            <div className="chart-card">
-              <h3>Changes Over Time</h3>
-              <ChangesOverTimeChart 
-                issueDates={issueDates} 
-                titleNumber={title.number} 
-              />
-            </div>
+            <ChangesOverTimeChart 
+              issueDates={issueDates} 
+              titleNumber={title.number} 
+            />
           </div>
         )}
       </div>

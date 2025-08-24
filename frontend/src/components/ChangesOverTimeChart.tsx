@@ -139,7 +139,7 @@ const ChangesOverTimeChart: React.FC<ChangesOverTimeChartProps> = ({ issueDates,
     labels: labels.map(label => formatLabel(label, strategy)),
     datasets: [
       {
-        label: `Changes for Title ${titleNumber} (${getStrategyDescription(strategy)})`,
+        label: `Title ${titleNumber} (${getStrategyDescription(strategy)})`,
         data: smoothedData,
         borderColor: 'rgb(59, 130, 246)',
         backgroundColor: 'rgba(59, 130, 246, 0.1)',
@@ -172,7 +172,7 @@ const ChangesOverTimeChart: React.FC<ChangesOverTimeChartProps> = ({ issueDates,
       },
       title: {
         display: true,
-        text: `Changes Over Time - Title ${titleNumber}`,
+        text: `Updates Over Time`,
         font: {
           size: 18,
           weight: 'bold' as const,

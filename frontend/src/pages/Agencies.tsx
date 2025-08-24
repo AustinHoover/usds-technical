@@ -23,7 +23,9 @@ const AgencyCard: React.FC<AgencyCardProps> = ({ agency, childAgencies, onViewDe
   return (
     <div className="agency-card">
       <div className="agency-header">
-        <div className="agency-info">
+        <div className="agency-info"
+        onClick={() => onViewDetails(agency.id)}
+        >
           <h3 className="agency-name">{agency.display_name}</h3>
         </div>
         <div className="agency-actions">
@@ -37,12 +39,6 @@ const AgencyCard: React.FC<AgencyCardProps> = ({ agency, childAgencies, onViewDe
               {isExpanded ? '▼' : '▶'}
             </button>
           }
-          <button 
-            className="view-details-button"
-            onClick={() => onViewDetails(agency.id)}
-          >
-            View Details
-          </button>
         </div>
       </div>
       
