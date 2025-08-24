@@ -27,13 +27,16 @@ const AgencyCard: React.FC<AgencyCardProps> = ({ agency, childAgencies, onViewDe
           <h3 className="agency-name">{agency.display_name}</h3>
         </div>
         <div className="agency-actions">
-          <button 
-            className="expand-button"
-            onClick={toggleExpanded}
-            aria-label={isExpanded ? 'Collapse' : 'Expand'}
-          >
-            {isExpanded ? '▼' : '▶'}
-          </button>
+          { 
+            childAgencies.length > 0 &&
+            <button 
+              className="expand-button"
+              onClick={toggleExpanded}
+              aria-label={isExpanded ? 'Collapse' : 'Expand'}
+            >
+              {isExpanded ? '▼' : '▶'}
+            </button>
+          }
           <button 
             className="view-details-button"
             onClick={() => onViewDetails(agency.id)}
