@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import ChangesOverTimeChart from '../components/ChangesOverTimeChart';
+import { buildApiUrl } from '../config/api';
 
 interface TitleSummaryEntry {
   number: number;
@@ -30,7 +31,7 @@ const TitleDetails: React.FC = () => {
 
   const fetchTitleDetails = async (): Promise<void> => {
     try {
-      const response = await fetch('/api/titles/summary');
+      const response = await fetch(buildApiUrl('api/titles/summary'));
       if (response.ok) {
         const data = await response.json();
         const foundTitle = data.find((t: TitleSummaryEntry) => t.number.toString() === titleNumber);
@@ -49,7 +50,7 @@ const TitleDetails: React.FC = () => {
 
   const fetchIssueDates = async (): Promise<void> => {
     try {
-      const response = await fetch(`/api/titles/${titleNumber}/issue-dates`);
+      const response = await fetch(buildApiUrl(`api/titles/${titleNumber}/issue-dates`));
       if (response.ok) {
         const data = await response.json();
         setIssueDates(data);
@@ -65,7 +66,7 @@ const TitleDetails: React.FC = () => {
 
   const fetchAdvancedStats = async (): Promise<void> => {
     try {
-      const response = await fetch(`/api/titles/${titleNumber}/advanced-stats`);
+      const response = await fetch(buildApiUrl(`api/titles/${titleNumber}/advanced-stats`));
       if (response.ok) {
         const data = await response.json();
         setAdvancedStats(data);

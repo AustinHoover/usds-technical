@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TitleCard from '../components/TitleCard';
+import { buildApiUrl } from '../config/api';
 
 export interface TitleSummaryEntry {
   number: number;
@@ -28,7 +29,7 @@ const Titles: React.FC = () => {
     setError('');
     
     try {
-      const response = await fetch('/api/titles/summary');
+      const response = await fetch(buildApiUrl('/api/titles/summary'));
       if (response.ok) {
         const data = await response.json();
         setTitles(data);

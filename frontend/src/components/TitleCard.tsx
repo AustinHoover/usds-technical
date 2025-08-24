@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { TitleSummaryEntry } from '../pages/Titles';
+import { buildApiUrl } from '../config/api';
 
 interface TitleCardProps {
   title: TitleSummaryEntry;
@@ -46,7 +47,7 @@ const TitleCard: React.FC<TitleCardProps> = ({ title, onClick }) => {
     const fetchAdvancedStats = async () => {
       setStatsLoading(true);
       try {
-        const response = await fetch(`http://localhost:8080/api/titles/${title.number}/advanced-stats`);
+        const response = await fetch(buildApiUrl(`api/titles/${title.number}/advanced-stats`));
         if (response.ok) {
           const stats = await response.json();
           setAdvancedStats(stats);

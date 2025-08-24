@@ -4,8 +4,12 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
-# For CRA: RUN npm run build
-# For Vite: VITE env already passed as build arg; use:
+
+# Accept build argument for API base URL
+ARG REACT_APP_API_BASE_URL
+ENV REACT_APP_API_BASE_URL=${REACT_APP_API_BASE_URL}
+
+# Build the React app
 RUN npm run build
 
 # ---------- Runtime stage ----------

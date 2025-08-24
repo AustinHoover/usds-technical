@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { buildApiUrl } from '../config/api';
 
 interface AgencySummary {
   id: number;
@@ -83,7 +84,7 @@ const Agencies: React.FC = () => {
         setLoading(true);
         
         // Fetch top-level agencies
-        const topLevelResponse = await fetch('http://localhost:8080/api/agencies/top-level');
+        const topLevelResponse = await fetch(buildApiUrl('api/agencies/top-level'));
         if (!topLevelResponse.ok) throw new Error('Failed to fetch top-level agencies');
         const topLevel = await topLevelResponse.json();
         
@@ -96,7 +97,7 @@ const Agencies: React.FC = () => {
         setTopLevelAgencies(topLevelSummaries);
         
         // Fetch all agencies for child lookup
-        const allResponse = await fetch('http://localhost:8080/api/agencies/summary');
+        const allResponse = await fetch(buildApiUrl('api/agencies/summary'));
         if (!allResponse.ok) throw new Error('Failed to fetch all agencies');
         const allSummaries = await allResponse.json();
         setAllAgencies(allSummaries);

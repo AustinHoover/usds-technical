@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { buildApiUrl } from '../config/api';
 
 interface AgencyModel {
   id: number;
@@ -34,15 +35,15 @@ const AgencyDetails: React.FC = () => {
         setLoading(true);
         
         // Fetch agency details
-        const agencyResponse = await fetch(`http://localhost:8080/api/agencies/${agencyId}`);
+        const agencyResponse = await fetch(buildApiUrl(`api/agencies/${agencyId}`));
         if (!agencyResponse.ok) throw new Error('Agency not found');
         
         const agencyData = await agencyResponse.json();
         setAgency(agencyData);
         
         // Fetch parent agency if exists
-        if (agencyData.parent !== -1) {
-          const parentResponse = await fetch(`http://localhost:8080/api/agencies/${agencyData.parent}`);
+        if (agencyData.parent) {
+          const parentResponse = await fetch(buildApiUrl(`api/agencies/${agencyData.parent}`));
           if (parentResponse.ok) {
             const parentData = await parentResponse.json();
             setParentAgency(parentData);
@@ -50,7 +51,7 @@ const AgencyDetails: React.FC = () => {
         }
         
         // Fetch all agencies to find children
-        const allResponse = await fetch('http://localhost:8080/api/agencies/summary');
+        const allResponse = await fetch(buildApiUrl('api/agencies/summary'));
         if (allResponse.ok) {
           const allSummaries = await allResponse.json();
           const childIds = allSummaries
@@ -60,7 +61,7 @@ const AgencyDetails: React.FC = () => {
           // Fetch full details for child agencies
           const childAgenciesData = await Promise.all(
             childIds.map(async (childId: number) => {
-              const childResponse = await fetch(`http://localhost:8080/api/agencies/${childId}`);
+              const childResponse = await fetch(buildApiUrl(`api/agencies/${childId}`));
               if (childResponse.ok) {
                 return await childResponse.json();
               }
