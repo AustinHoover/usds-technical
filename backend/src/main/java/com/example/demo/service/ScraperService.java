@@ -2,20 +2,26 @@ package com.example.demo.service;
 
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.model.agency.AgenciesDTO;
+import com.example.demo.model.agency.Agency;
+import com.example.demo.model.agency.AgencyModel;
 import com.example.demo.model.titledoc.TitleDoc;
 import com.example.demo.model.titlesummary.TitleSummary;
 import com.example.demo.model.titlesummary.TitleSummaryEntry;
 import com.example.demo.model.titlever.TitleVersion;
 import com.example.demo.model.titlever.TitleVersions;
+import com.example.demo.repository.AgencyRepository;
 import com.example.demo.repository.TitleSummaryRepository;
 import com.example.demo.repository.TitleVersionRepository;
 import com.example.demo.repository.TitleDocRepository;
@@ -31,12 +37,14 @@ public class ScraperService {
     private final TitleSummaryRepository titleSummaryRepository;
     private final TitleVersionRepository titleVersionRepository;
     private final TitleDocRepository titleDocRepository;
+    private final AgencyRepository agencyRepository;
 
     @Autowired
-    public ScraperService(TitleSummaryRepository titleSummaryRepository, TitleVersionRepository titleVersionRepository, TitleDocRepository titleDocRepository) {
+    public ScraperService(TitleSummaryRepository titleSummaryRepository, TitleVersionRepository titleVersionRepository, TitleDocRepository titleDocRepository, AgencyRepository agencyRepository) {
         this.titleSummaryRepository = titleSummaryRepository;
         this.titleVersionRepository = titleVersionRepository;
         this.titleDocRepository = titleDocRepository;
+        this.agencyRepository = agencyRepository;
     }
 
     @Transactional
@@ -46,6 +54,9 @@ public class ScraperService {
 
         //for each title out there, get the versions and save them
         for(TitleSummaryEntry titleSummaryEntry : titleSummary.getTitles()){
+            if(titleSummaryRepository.findByNumber(titleSummaryEntry.getNumber()) != null){
+                continue;
+            }
             titleSummaryRepository.save(titleSummaryEntry);
             TitleVersions titleVersions = this.getVersionsOfTitle(titleSummaryEntry.getNumber());
             //for each version, save it
@@ -84,6 +95,11 @@ public class ScraperService {
 
             titleDocRepository.save(titleDoc);
         }
+
+
+        //get data for all agencies
+        List<AgencyModel> agencies = this.getAgencies();
+        agencyRepository.saveAll(agencies);
     }
 
 
@@ -155,6 +171,50 @@ public class ScraperService {
         }
         log.info("Versions of title fetched");
         return titleVersions;
+    }
+
+    private List<AgencyModel> getAgencies(){
+        log.info("Get the data for all agencies");
+        String content = null;
+        URLConnection connection = null;
+        ObjectMapper objectMapper = new ObjectMapper();
+        AgenciesDTO agencyDTO = null;
+        List<AgencyModel> agencies = new ArrayList<>();
+        try {
+            connection =  new URL("https://www.ecfr.gov/api/admin/v1/agencies.json").openConnection();
+            Scanner scanner = new Scanner(connection.getInputStream());
+            scanner.useDelimiter("\\Z");
+            content = scanner.next();
+            scanner.close();
+            agencyDTO = objectMapper.readValue(content, AgenciesDTO.class);
+            AtomicInteger idIncrementer = new AtomicInteger(1);
+            for(Agency agency : agencyDTO.getAgencies()){
+                assignIdsToAgencies(null, agency, idIncrementer, agencies);
+            }
+        }catch ( Exception ex ) {
+            ex.printStackTrace();
+        }
+        log.info("Agency data fetched");
+        return agencies;
+    }
+
+    private void assignIdsToAgencies(AgencyModel parent, Agency dtoObj, AtomicInteger idIncrementer, List<AgencyModel> agencies){
+        AgencyModel agencyModel = new AgencyModel();
+        agencyModel.setId(idIncrementer.getAndIncrement());
+        agencyModel.setName(dtoObj.getName());
+        agencyModel.setShort_name(dtoObj.getShort_name());
+        agencyModel.setDisplay_name(dtoObj.getDisplay_name());
+        agencyModel.setSortable_name(dtoObj.getSortable_name());
+        agencyModel.setSlug(dtoObj.getSlug());
+        if(parent != null){
+            agencyModel.setParent(parent.getId());
+        }
+        agencies.add(agencyModel);
+        if(dtoObj.getChildren() != null){
+            for(Agency child : dtoObj.getChildren()){
+                assignIdsToAgencies(agencyModel, child, idIncrementer, agencies);
+            }
+        }
     }
 
 

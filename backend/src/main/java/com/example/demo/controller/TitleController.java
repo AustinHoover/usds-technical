@@ -103,6 +103,7 @@ public class TitleController {
     }
 
     @GetMapping("/{titleNumber}/advanced-stats")
+    @Cacheable(value = "advancedStats", key = "#titleNumber")
     public ResponseEntity<Map<String, Object>> getAdvancedStats(@PathVariable String titleNumber) {
         try {
             Map<String, Object> stats = new HashMap<>();

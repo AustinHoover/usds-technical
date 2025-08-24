@@ -14,9 +14,9 @@ interface TitleSummaryEntry {
 
 const TitleDetails: React.FC = () => {
   const { titleNumber } = useParams<{ titleNumber: string }>();
-  const navigate = useNavigate();
   const [title, setTitle] = useState<TitleSummaryEntry | null>(null);
   const [issueDates, setIssueDates] = useState<string[]>([]);
+  const [advancedStats, setAdvancedStats] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
 
@@ -24,6 +24,7 @@ const TitleDetails: React.FC = () => {
     if (titleNumber) {
       fetchTitleDetails();
       fetchIssueDates();
+      fetchAdvancedStats();
     }
   }, [titleNumber]);
 
@@ -62,13 +63,19 @@ const TitleDetails: React.FC = () => {
     }
   };
 
-  const formatDate = (dateString: string): string => {
-    if (!dateString) return 'N/A';
+  const fetchAdvancedStats = async (): Promise<void> => {
     try {
-      const date = new Date(dateString);
-      return date.toLocaleDateString();
-    } catch {
-      return dateString;
+      const response = await fetch(`/api/titles/${titleNumber}/advanced-stats`);
+      if (response.ok) {
+        const data = await response.json();
+        setAdvancedStats(data);
+      } else {
+        setError(`Error fetching issue dates: ${response.status} ${response.statusText}`);
+      }
+    } catch (error) {
+      setError('Error connecting to backend: ' + (error as Error).message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -117,30 +124,22 @@ const TitleDetails: React.FC = () => {
               <span className="value">{title.name || 'No name available'}</span>
             </div>
             <div className="overview-item">
-              <span className="label">Status:</span>
-              <span className="value">
-                {title.reserved ? (
-                  <span className="reserved-badge">Reserved</span>
-                ) : (
-                  <span className="active-badge">Active</span>
-                )}
-              </span>
-            </div>
-            <div className="overview-item">
               <span className="label">Total Versions:</span>
               <span className="value">{title.version_count}</span>
             </div>
-            <div className="date-item">
-              <span className="date-label">Latest Issue Date:</span>
-              <span className="date-value">{formatDate(title.latest_issue_date)}</span>
-            </div>
-            <div className="date-item">
-              <span className="date-label">Latest Amendment:</span>
-              <span className="date-value">{formatDate(title.latest_amended_on)}</span>
-            </div>
-            <div className="date-item">
-              <span className="date-label">Up to Date As Of:</span>
-              <span className="date-value">{formatDate(title.up_to_date_as_of)}</span>
+            <div className="overview-item">
+              <span className="label">Size:</span>
+              <span className="value">
+                {(() => {
+                  const bytes = advancedStats.size;
+                  if (bytes === 0) return '0 bytes';
+                  const k = 1024;
+                  const sizes = ['bytes', 'KB', 'MB', 'GB', 'TB'];
+                  const i = Math.floor(Math.log(bytes) / Math.log(k));
+                  const value = parseFloat((bytes / Math.pow(k, i)).toFixed(2));
+                  return `${value} ${sizes[i]}`;
+                })()}
+              </span>
             </div>
           </div>
         </div>
