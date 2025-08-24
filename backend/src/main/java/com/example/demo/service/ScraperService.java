@@ -98,8 +98,10 @@ public class ScraperService {
 
 
         //get data for all agencies
-        List<AgencyModel> agencies = this.getAgencies();
-        agencyRepository.saveAll(agencies);
+        if(agencyRepository.findAll().size() < 1){
+            List<AgencyModel> agencies = this.getAgencies();
+            agencyRepository.saveAll(agencies);
+        }
     }
 
 

@@ -7,7 +7,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 
 @Component
@@ -18,9 +17,7 @@ public class ScraperScheduler {
 
     private final AtomicBoolean running = new AtomicBoolean(false);
 
-    // Every 10 minutes, with initial delay
-    @Scheduled(fixedRateString = "${scrape.fixed-rate-ms:600000}",
-               initialDelayString = "${scrape.initial-delay-ms:15000}")
+    @Scheduled(fixedRate = 3600000, initialDelay = 15000)
     public void run() {
         log.info("ScraperScheduler running");
         if(!running.compareAndSet(false, true)) {
@@ -33,10 +30,5 @@ public class ScraperScheduler {
         }
         log.info("ScraperScheduler completed");
     }
-
-    // @PostConstruct
-    // public void onStartup() {
-    //     this.run();
-    // }
 
 }
