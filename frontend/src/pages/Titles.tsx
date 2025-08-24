@@ -54,15 +54,8 @@ const Titles: React.FC = () => {
   return (
     <div className="titles-page">
       <div className="titles-header">
-        <h1>Title Management</h1>
-        <p>All available titles in the system with version counts</p>
-        <button 
-          onClick={handleRefresh}
-          className="refresh-button"
-          disabled={isLoading}
-        >
-          {isLoading ? 'Refreshing...' : 'Refresh Titles'}
-        </button>
+        <h1>Titles</h1>
+        <p>All titles in the Code of Federal Regulations</p>
       </div>
 
       {isLoading && (
@@ -98,13 +91,6 @@ const Titles: React.FC = () => {
       {!isLoading && !error && titles.length === 0 && (
         <div className="no-titles">
           <p>No titles found in the system.</p>
-        </div>
-      )}
-
-      {!isLoading && !error && titles.length > 0 && (
-        <div className="titles-summary">
-          <p>Total Titles: {titles.length}</p>
-          <p>Total Versions: {titles.reduce((sum, title) => sum + title.version_count, 0)}</p>
         </div>
       )}
     </div>

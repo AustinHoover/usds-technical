@@ -13,7 +13,7 @@ const Navigation: React.FC = () => {
       <div className="nav-container">
         <div className="nav-brand">
           <Link to="/" className="brand-link">
-            USDS Technical
+            CFR Visualizer
           </Link>
         </div>
         

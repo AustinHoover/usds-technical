@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
 const Home: React.FC = () => {
-  const [count, setCount] = useState<number>(0);
-  const [apiMessage, setApiMessage] = useState<string>('');
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [scraperMessage, setScraperMessage] = useState<string>('');
   const [isScraperLoading, setIsScraperLoading] = useState<boolean>(false);
   
@@ -38,19 +35,6 @@ const Home: React.FC = () => {
     }
   };
 
-  const testApiConnection = async (): Promise<void> => {
-    setIsLoading(true);
-    try {
-      const response = await fetch('/api/hello');
-      const data = await response.text();
-      setApiMessage(data);
-    } catch (error) {
-      setApiMessage('Error connecting to backend: ' + (error as Error).message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const triggerScraper = async (): Promise<void> => {
     setIsScraperLoading(true);
     try {
@@ -75,8 +59,8 @@ const Home: React.FC = () => {
 
   return (
     <div className="home-page">
-      <h1>Welcome to USDS Technical</h1>
-      <p>This is the home page of your application.</p>
+      <h1>CFR Visualizer</h1>
+      <p>A one-stop shop for analyzing Federal Code data.</p>
       
       {/* Title 1 Issue Dates Section */}
       <div className="title1-section">
@@ -119,23 +103,6 @@ const Home: React.FC = () => {
           </div>
         )}
       </div>
-      
-      <div className="api-section">
-        <h3>Backend Connection Test</h3>
-        <button 
-          className="api-button"
-          onClick={testApiConnection}
-          disabled={isLoading}
-        >
-          {isLoading ? 'Testing...' : 'Test Backend Connection'}
-        </button>
-        {apiMessage && (
-          <div className="api-response">
-            <p><strong>Backend Response:</strong></p>
-            <p>{apiMessage}</p>
-          </div>
-        )}
-      </div>
 
       <div className="scraper-section">
         <h3>Data Scraper</h3>
@@ -152,23 +119,6 @@ const Home: React.FC = () => {
             <p>{scraperMessage}</p>
           </div>
         )}
-      </div>
-
-      <div className="counter-section">
-        <h3>Counter Demo</h3>
-        <p>Counter: {count}</p>
-        <button 
-          className="counter-button"
-          onClick={() => setCount(count + 1)}
-        >
-          Increment
-        </button>
-        <button 
-          className="counter-button"
-          onClick={() => setCount(count - 1)}
-        >
-          Decrement
-        </button>
       </div>
     </div>
   );
