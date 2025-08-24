@@ -31,6 +31,9 @@ public class TitleDoc {
     @Column(name="url")
     String url;
 
+    @Column(name="size")
+    Integer size;
+
     public String getTitle() {
         return title;
     }
@@ -61,6 +64,14 @@ public class TitleDoc {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public Integer getSize() {
+        return size;
+    }
+
+    public void setSize(Integer size) {
+        this.size = size;
     }
 
 }

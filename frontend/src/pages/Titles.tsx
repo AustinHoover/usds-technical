@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TitleCard from '../components/TitleCard';
 
-interface TitleSummaryEntry {
+export interface TitleSummaryEntry {
   number: number;
   name: string;
   latest_amended_on: string;

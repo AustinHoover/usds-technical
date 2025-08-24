@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import com.example.demo.repository.TitleSummaryRepository;
 import com.example.demo.model.titlever.TitleVersion;
 import com.example.demo.model.titlesummary.TitleSummaryEntry;
+import com.example.demo.model.titledoc.TitleDoc;
+import com.example.demo.repository.TitleDocRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,6 +27,9 @@ public class TitleController {
     
     @Autowired
     private TitleVersionRepository titleVersionRepository;
+
+    @Autowired
+    private TitleDocRepository titleDocRepository;
     
     @Autowired
     private TitleSummaryRepository titleSummaryRepository;
@@ -92,6 +97,19 @@ public class TitleController {
                 .collect(Collectors.toList());
             
             return ResponseEntity.ok(uniqueIssueDates);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @GetMapping("/{titleNumber}/advanced-stats")
+    public ResponseEntity<Map<String, Object>> getAdvancedStats(@PathVariable String titleNumber) {
+        try {
+            Map<String, Object> stats = new HashMap<>();
+            TitleDoc titleDoc = titleDocRepository.findByTitle(titleNumber);
+            stats.put("size", titleDoc.getSize());
+            
+            return ResponseEntity.ok(stats);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }

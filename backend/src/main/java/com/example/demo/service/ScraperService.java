@@ -19,6 +19,8 @@ import com.example.demo.model.titlever.TitleVersions;
 import com.example.demo.repository.TitleSummaryRepository;
 import com.example.demo.repository.TitleVersionRepository;
 import com.example.demo.repository.TitleDocRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 
@@ -55,6 +57,9 @@ public class ScraperService {
                 titleVersionRepository.flush();
             } else {
                 log.info("No versions found for title: " + titleSummaryEntry.getName() + " - " + titleSummaryEntry.getNumber());
+
+                //probably a reserved title, skip it
+                continue;
             }
             log.info("Getting summary for title: " + titleSummaryEntry.getNumber());
             String content = this.getTitleAtTime(titleSummaryEntry.getNumber(), titleSummaryEntry.getLatest_issue_date());
@@ -63,6 +68,20 @@ public class ScraperService {
             titleDoc.setDate(titleSummaryEntry.getLatest_issue_date());
             titleDoc.setContent(content);
             titleDoc.setUrl("https://www.ecfr.gov/api/versioner/v1/structure/" + titleSummaryEntry.getLatest_issue_date() + "/title-" + titleSummaryEntry.getNumber() + ".json");
+            titleDoc.setSize(0);
+            //parse data from the structure
+            if(content != null){
+                ObjectMapper objectMapper = new ObjectMapper();
+                try {
+                    JsonNode parsed = objectMapper.readTree(content);
+                    titleDoc.setSize(parsed.get("size").asInt(0));
+                } catch (JsonProcessingException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+
+
             titleDocRepository.save(titleDoc);
         }
     }
