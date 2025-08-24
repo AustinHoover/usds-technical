@@ -1,10 +1,14 @@
 package com.example.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.repository.TitleVersionRepository;
+
+import lombok.extern.slf4j.Slf4j;
+
 import com.example.demo.repository.TitleSummaryRepository;
 import com.example.demo.model.titlever.TitleVersion;
 import com.example.demo.model.titlesummary.TitleSummaryEntry;
@@ -16,6 +20,7 @@ import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/titles")
+@Slf4j
 public class TitleController {
     
     @Autowired
@@ -25,6 +30,7 @@ public class TitleController {
     private TitleSummaryRepository titleSummaryRepository;
     
     @GetMapping
+    @Cacheable(value = "titles", key = "#root.methodName")
     public ResponseEntity<List<TitleSummaryEntry>> getAllTitles() {
         try {
             List<TitleSummaryEntry> allTitles = titleSummaryRepository.findAll();
@@ -35,6 +41,7 @@ public class TitleController {
     }
     
     @GetMapping("/summary")
+    @Cacheable(value = "titleSummaries", key = "#root.methodName")
     public ResponseEntity<List<Map<String, Object>>> getTitleSummaries() {
         try {
             List<TitleSummaryEntry> allTitles = titleSummaryRepository.findAll();
@@ -64,7 +71,6 @@ public class TitleController {
                     return summary;
                 })
                 .collect(Collectors.toList());
-            
             return ResponseEntity.ok(summariesWithCounts);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
