@@ -208,6 +208,8 @@ public class ScraperService {
         agencyModel.setSlug(dtoObj.getSlug());
         if(parent != null){
             agencyModel.setParent(parent.getId());
+        } else {
+            agencyModel.setParent(-1);
         }
         agencies.add(agencyModel);
         if(dtoObj.getChildren() != null){

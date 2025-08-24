@@ -6,20 +6,24 @@ import './App.css';
 import Navigation from './components/Navigation';
 import Home from './pages/Home';
 import Titles from './pages/Titles';
-import TitleDetails from './pages/TitleDetails';
 import About from './pages/About';
+import TitleDetails from './pages/TitleDetails';
+import Agencies from './pages/Agencies';
+import AgencyDetails from './pages/AgencyDetails';
 
 function App(): JSX.Element {
   return (
     <Router>
       <div className="App">
         <Navigation />
-        <main className="main-content">
+        <main>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/titles" element={<Titles />} />
-            <Route path="/titles/:titleNumber" element={<TitleDetails />} />
             <Route path="/about" element={<About />} />
+            <Route path="/titles/:titleNumber" element={<TitleDetails />} />
+            <Route path="/agencies" element={<Agencies />} />
+            <Route path="/agencies/:agencyId" element={<AgencyDetails />} />
           </Routes>
         </main>
       </div>

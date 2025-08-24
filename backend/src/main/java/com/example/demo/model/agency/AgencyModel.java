@@ -33,8 +33,8 @@ public class AgencyModel {
     @Column(name = "slug")
     String slug;
 
-    @Column(name = "parent", nullable = true)
-    Integer parent;
+    @Column(name = "parent")
+    Integer parent = -1;
 
     public String getName() {
         return name;

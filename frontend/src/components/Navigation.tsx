@@ -36,6 +36,14 @@ const Navigation: React.FC = () => {
           </li>
           <li className="nav-item">
             <Link 
+              to="/agencies" 
+              className={`nav-link ${isActive('/agencies') ? 'active' : ''}`}
+            >
+              Agencies
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link 
               to="/about" 
               className={`nav-link ${isActive('/about') ? 'active' : ''}`}
             >
