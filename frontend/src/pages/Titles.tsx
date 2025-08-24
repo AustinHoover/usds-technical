@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import TitleCard from '../components/TitleCard';
 
 interface TitleSummaryEntry {
@@ -12,6 +13,7 @@ interface TitleSummaryEntry {
 }
 
 const Titles: React.FC = () => {
+  const navigate = useNavigate();
   const [titles, setTitles] = useState<TitleSummaryEntry[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
@@ -43,12 +45,7 @@ const Titles: React.FC = () => {
   };
 
   const handleTitleClick = (titleNumber: number) => {
-    // You can add navigation or modal functionality here later
-    console.log(`Clicked on Title ${titleNumber}`);
-  };
-
-  const handleRefresh = () => {
-    fetchAllTitles();
+    navigate(`/titles/${titleNumber}`);
   };
 
   return (

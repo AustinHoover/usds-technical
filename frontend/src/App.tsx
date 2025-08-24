@@ -6,6 +6,7 @@ import './App.css';
 import Navigation from './components/Navigation';
 import Home from './pages/Home';
 import Titles from './pages/Titles';
+import TitleDetails from './pages/TitleDetails';
 import About from './pages/About';
 
 function App(): JSX.Element {
@@ -17,6 +18,7 @@ function App(): JSX.Element {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/titles" element={<Titles />} />
+            <Route path="/titles/:titleNumber" element={<TitleDetails />} />
             <Route path="/about" element={<About />} />
           </Routes>
         </main>

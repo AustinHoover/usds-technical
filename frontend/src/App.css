@@ -827,3 +827,240 @@
     min-width: 250px;
   }
 }
+
+/* Title Details Page Styles */
+.title-details-page {
+  max-width: none;
+  margin: 0;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.title-details-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 2rem;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  border: 1px solid #e9ecef;
+  position: relative;
+}
+
+.back-button {
+  position: absolute;
+  left: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: linear-gradient(45deg, #6c757d, #495057);
+  border: none;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.back-button:hover {
+  transform: translateY(-50%) translateX(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+.title-details-header h1 {
+  margin-bottom: 0.5rem;
+  font-size: 2.5rem;
+  color: #333;
+}
+
+.title-subtitle {
+  font-size: 1.3rem;
+  color: #666;
+  margin: 0;
+}
+
+/* Update title details content layout for chart */
+.title-details-content {
+  display: flex;
+  flex-direction: row;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.overview-card, .dates-card {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border: 1px solid #e9ecef;
+}
+
+.overview-card h3, .dates-card h3 {
+  color: #333;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  border-bottom: 2px solid #f8f9fa;
+  padding-bottom: 0.5rem;
+}
+
+.overview-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid #f8f9fa;
+}
+
+.overview-item:last-child {
+  border-bottom: none;
+}
+
+.overview-item .label {
+  font-weight: 500;
+  color: #666;
+  font-size: 1rem;
+}
+
+.overview-item .value {
+  color: #333;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.active-badge {
+  background: linear-gradient(45deg, #28a745, #20c997);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.issue-dates-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.issue-date-item {
+  background-color: #f8f9fa;
+  color: #333;
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+  text-align: center;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.error-section {
+  text-align: center;
+  padding: 4rem;
+  color: #666;
+}
+
+.error-section h1 {
+  color: #dc3545;
+  margin-bottom: 1rem;
+}
+
+/* Responsive Design for Title Details */
+@media (max-width: 768px) {
+  .title-details-header {
+    padding: 1.5rem;
+  }
+  
+  .title-details-header h1 {
+    font-size: 2rem;
+  }
+  
+  .title-subtitle {
+    font-size: 1.1rem;
+  }
+  
+  .back-button {
+    position: static;
+    transform: none;
+    margin-bottom: 1rem;
+  }
+  
+  .back-button:hover {
+    transform: none;
+  }
+  
+  .title-details-content {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .overview-card, .dates-card {
+    padding: 1.5rem;
+  }
+  
+  .overview-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .issue-dates-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Chart Styles */
+.chart-container {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  max-width: 800px;
+  border: 1px solid #e9ecef;
+  grid-column: 1 / -1;
+}
+
+.chart-wrapper {
+  width: 100%;
+  height: 300px;
+  margin-bottom: 1rem;
+}
+
+.chart-summary {
+  text-align: center;
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.no-data-message {
+  text-align: center;
+  color: #666;
+  font-style: italic;
+  padding: 2rem;
+}
+
+.chart-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  margin-bottom: 1rem;
+}
+
+.chart-card h3 {
+  color: #333;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  border-bottom: 2px solid #f8f9fa;
+  padding-bottom: 0.5rem;
+  text-align: center;
+}
