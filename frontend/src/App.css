@@ -64,8 +64,10 @@
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 }
 
+
+
 /* Page Components */
-.home-page, .titles-page, .about-page {
+.home-page, .about-page {
   max-width: 800px;
   margin: 0 auto;
   background: white;
@@ -73,6 +75,17 @@
   border-radius: 15px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
+
+.titles-page {
+  max-width: none;
+  margin: 0;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+
 
 .home-page h1, .titles-page h1, .about-page h1 {
   color: #333;
@@ -539,6 +552,260 @@
 
 .retry-button {
   background: linear-gradient(45deg, #ff9800, #f57c00);
+}
+
+/* Title Card Styles */
+.title-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border: 1px solid #e9ecef;
+  transition: all 0.3s ease;
+  cursor: default;
+}
+
+.title-card.clickable {
+  cursor: pointer;
+}
+
+.title-card.clickable:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  border-color: #667eea;
+}
+
+.title-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #f8f9fa;
+}
+
+.title-number {
+  color: #333;
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.title-badges {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.reserved-badge {
+  background: linear-gradient(45deg, #ff9800, #f57c00);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.version-count-badge {
+  background: linear-gradient(45deg, #2196F3, #1976D2);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.title-content {
+  color: #666;
+}
+
+.title-name {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+  min-height: 2.8rem;
+  display: flex;
+  align-items: center;
+}
+
+.title-dates {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.date-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f8f9fa;
+}
+
+.date-item:last-child {
+  border-bottom: none;
+}
+
+.date-label {
+  font-weight: 500;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.date-value {
+  color: #333;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* Updated Titles Page Styles */
+.titles-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 2rem;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  border: 1px solid #e9ecef;
+  max-width: none;
+}
+
+.titles-header h1 {
+  margin-bottom: 0.5rem;
+  font-size: 2.5rem;
+}
+
+.titles-header p {
+  margin-bottom: 1.5rem;
+  color: #666;
+  font-size: 1.2rem;
+}
+
+.loading-section {
+  text-align: center;
+  padding: 4rem;
+  color: #666;
+  font-size: 1.2rem;
+}
+
+.titles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+  max-width: none;
+  width: 100%;
+}
+
+.no-titles {
+  text-align: center;
+  padding: 4rem;
+  color: #666;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  border: 1px solid #e9ecef;
+  font-size: 1.2rem;
+}
+
+.titles-summary {
+  text-align: center;
+  padding: 1.5rem;
+  background-color: #d4edda;
+  border-radius: 10px;
+  border: 1px solid #c3e6cb;
+  color: #155724;
+  font-weight: 500;
+  font-size: 1.1rem;
+  max-width: none;
+}
+
+/* Responsive Design for Title Cards */
+@media (min-width: 1200px) {
+  .titles-grid {
+    grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+    gap: 2.5rem;
+  }
+  
+  .title-card {
+    padding: 2rem;
+  }
+  
+  .title-number {
+    font-size: 1.8rem;
+  }
+  
+  .title-name {
+    font-size: 1.2rem;
+    min-height: 3.2rem;
+  }
+  
+  .date-item {
+    padding: 0.75rem 0;
+  }
+  
+  .date-label, .date-value {
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  .titles-grid {
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .title-card {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .titles-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .title-card {
+    padding: 1rem;
+  }
+  
+  .title-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .title-badges {
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+  
+  .title-number {
+    font-size: 1.3rem;
+  }
+  
+  .date-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+  
+  .titles-header {
+    padding: 1.5rem;
+  }
+  
+  .titles-header h1 {
+    font-size: 2rem;
+  }
+  
+  .titles-header p {
+    font-size: 1.1rem;
+  }
 }
 
 @media (max-width: 768px) {

@@ -1,96 +1,110 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import TitleCard from '../components/TitleCard';
+
+interface TitleSummaryEntry {
+  number: number;
+  name: string;
+  latest_amended_on: string;
+  latest_issue_date: string;
+  up_to_date_as_of: string;
+  reserved: boolean;
+  version_count: number;
+}
 
 const Titles: React.FC = () => {
-  const [titleNumber, setTitleNumber] = useState<string>('');
-  const [issueDates, setIssueDates] = useState<string[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [titles, setTitles] = useState<TitleSummaryEntry[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
 
-  const fetchIssueDates = async (): Promise<void> => {
-    if (!titleNumber.trim()) {
-      setError('Please enter a title number');
-      return;
-    }
+  // Fetch all titles when component mounts
+  useEffect(() => {
+    fetchAllTitles();
+  }, []);
 
+  const fetchAllTitles = async (): Promise<void> => {
     setIsLoading(true);
     setError('');
     
     try {
-      const response = await fetch(`/api/titles/${titleNumber}/issue-dates`);
+      const response = await fetch('/api/titles/summary');
       if (response.ok) {
         const data = await response.json();
-        setIssueDates(data);
+        setTitles(data);
       } else {
         setError(`Error: ${response.status} ${response.statusText}`);
-        setIssueDates([]);
+        setTitles([]);
       }
     } catch (error) {
       setError('Error connecting to backend: ' + (error as Error).message);
-      setIssueDates([]);
+      setTitles([]);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleSubmit = (e: React.FormEvent): void => {
-    e.preventDefault();
-    fetchIssueDates();
+  const handleTitleClick = (titleNumber: number) => {
+    // You can add navigation or modal functionality here later
+    console.log(`Clicked on Title ${titleNumber}`);
+  };
+
+  const handleRefresh = () => {
+    fetchAllTitles();
   };
 
   return (
     <div className="titles-page">
-      <h1>Title Management</h1>
-      <p>Search for title information and issue dates.</p>
-      
-      <div className="search-section">
-        <h3>Search by Title Number</h3>
-        <form onSubmit={handleSubmit}>
-          <div className="input-group">
-            <label htmlFor="titleNumber">Title Number:</label>
-            <input
-              type="text"
-              id="titleNumber"
-              value={titleNumber}
-              onChange={(e) => setTitleNumber(e.target.value)}
-              placeholder="Enter title number (e.g., 1)"
-              required
-            />
-            <button 
-              type="submit" 
-              disabled={isLoading || !titleNumber.trim()}
-              className="search-button"
-            >
-              {isLoading ? 'Searching...' : 'Search'}
-            </button>
-          </div>
-        </form>
+      <div className="titles-header">
+        <h1>Title Management</h1>
+        <p>All available titles in the system with version counts</p>
+        <button 
+          onClick={handleRefresh}
+          className="refresh-button"
+          disabled={isLoading}
+        >
+          {isLoading ? 'Refreshing...' : 'Refresh Titles'}
+        </button>
       </div>
+
+      {isLoading && (
+        <div className="loading-section">
+          <p>Loading titles...</p>
+        </div>
+      )}
 
       {error && (
         <div className="error-message">
           <p>❌ {error}</p>
+          <button 
+            onClick={fetchAllTitles}
+            className="retry-button"
+          >
+            Retry
+          </button>
         </div>
       )}
 
-      {issueDates.length > 0 && (
-        <div className="results-section">
-          <h3>Issue Dates for Title {titleNumber}</h3>
-          <div className="dates-list">
-            {issueDates.map((date, index) => (
-              <div key={index} className="date-item">
-                {date}
-              </div>
-            ))}
-          </div>
-          <p className="results-summary">
-            Found {issueDates.length} unique issue date{issueDates.length !== 1 ? 's' : ''}
-          </p>
+      {!isLoading && !error && titles.length > 0 && (
+        <div className="titles-grid">
+          {titles.map((title) => (
+            <TitleCard
+              key={title.number}
+              title={title}
+              onClick={() => handleTitleClick(title.number)}
+            />
+          ))}
         </div>
       )}
 
-      {!isLoading && !error && issueDates.length === 0 && titleNumber && (
-        <div className="no-results">
-          <p>No issue dates found for title {titleNumber}</p>
+      {!isLoading && !error && titles.length === 0 && (
+        <div className="no-titles">
+          <p>No titles found in the system.</p>
+        </div>
+      )}
+
+      {!isLoading && !error && titles.length > 0 && (
+        <div className="titles-summary">
+          <p>Total Titles: {titles.length}</p>
+          <p>Total Versions: {titles.reduce((sum, title) => sum + title.version_count, 0)}</p>
         </div>
       )}
     </div>
