@@ -2,17 +2,23 @@ package com.example.demo.service;
 
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.model.titledoc.TitleDoc;
 import com.example.demo.model.titlesummary.TitleSummary;
 import com.example.demo.model.titlesummary.TitleSummaryEntry;
+import com.example.demo.model.titlever.TitleVersion;
 import com.example.demo.model.titlever.TitleVersions;
 import com.example.demo.repository.TitleSummaryRepository;
 import com.example.demo.repository.TitleVersionRepository;
+import com.example.demo.repository.TitleDocRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,11 +28,13 @@ public class ScraperService {
 
     private final TitleSummaryRepository titleSummaryRepository;
     private final TitleVersionRepository titleVersionRepository;
+    private final TitleDocRepository titleDocRepository;
 
     @Autowired
-    public ScraperService(TitleSummaryRepository titleSummaryRepository, TitleVersionRepository titleVersionRepository) {
+    public ScraperService(TitleSummaryRepository titleSummaryRepository, TitleVersionRepository titleVersionRepository, TitleDocRepository titleDocRepository) {
         this.titleSummaryRepository = titleSummaryRepository;
         this.titleVersionRepository = titleVersionRepository;
+        this.titleDocRepository = titleDocRepository;
     }
 
     @Transactional
@@ -48,6 +56,14 @@ public class ScraperService {
             } else {
                 log.info("No versions found for title: " + titleSummaryEntry.getName() + " - " + titleSummaryEntry.getNumber());
             }
+            log.info("Getting summary for title: " + titleSummaryEntry.getNumber());
+            String content = this.getTitleAtTime(titleSummaryEntry.getNumber(), titleSummaryEntry.getLatest_issue_date());
+            TitleDoc titleDoc = new TitleDoc();
+            titleDoc.setTitle(titleSummaryEntry.getNumber().toString());
+            titleDoc.setDate(titleSummaryEntry.getLatest_issue_date());
+            titleDoc.setContent(content);
+            titleDoc.setUrl("https://www.ecfr.gov/api/versioner/v1/structure/" + titleSummaryEntry.getLatest_issue_date() + "/title-" + titleSummaryEntry.getNumber() + ".json");
+            titleDocRepository.save(titleDoc);
         }
     }
 
@@ -80,15 +96,13 @@ public class ScraperService {
     /**
      * Gets a title at a specific date
      * @param titleNumber The title number
-     * @param date The date to get the title at
      * @return The title at the specific date
      */
     private String getTitleAtTime(Integer titleNumber, String date){
-        log.info("Getting title at time");
         String content = null;
         URLConnection connection = null;
         try {
-            connection =  new URL("https://www.ecfr.gov/api/versioner/v1/full/" + date + "/title-" + titleNumber + ".xml").openConnection();
+            connection =  new URL("https://www.ecfr.gov/api/versioner/v1/structure/" + date + "/title-" + titleNumber + ".json").openConnection();
             Scanner scanner = new Scanner(connection.getInputStream());
             scanner.useDelimiter("\\Z");
             content = scanner.next();
@@ -96,7 +110,6 @@ public class ScraperService {
         }catch ( Exception ex ) {
             ex.printStackTrace();
         }
-        log.info("Title at time fetched");
         return content;
     }
 

@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.GeneratedValue;
 
@@ -11,32 +12,24 @@ import jakarta.persistence.GeneratedValue;
  * A title document at a given time
  */
 @Entity
-@Table(name = "title_doc")
+@Table(
+    name = "title_doc",
+    uniqueConstraints = @UniqueConstraint(columnNames = {"title","date"})
+)
 public class TitleDoc {
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
 
+    @Id
     @Column(name="title")
     String title;
 
     @Column(name="date")
     String date;
 
-    @Column(name="content")
+    @Column(name="content", columnDefinition = "TEXT")
     String content;
 
     @Column(name="url")
     String url;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getTitle() {
         return title;

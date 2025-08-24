@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 
 @Component
@@ -32,4 +33,10 @@ public class ScraperScheduler {
         }
         log.info("ScraperScheduler completed");
     }
+
+    // @PostConstruct
+    // public void onStartup() {
+    //     this.run();
+    // }
+
 }
